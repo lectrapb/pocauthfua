@@ -1,0 +1,16 @@
+rootProject.name = 'poc'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':rest-consumer'
+project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
+include ':catoken'
+project(':catoken').projectDir = file('./infrastructure/entry-points/catoken')
+include ':auth0'
+project(':auth0').projectDir = file('./infrastructure/driven-adapters/auth0')
+
+
