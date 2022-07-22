@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@Api(value="CaTokenController", description="Servcio validacion CA X Token")
+@Api(value="CaTokenController", description="Servcio validacion CD X Token")
 public class CaTokenController {
 
     private final ValidateCaUseCase useCase;

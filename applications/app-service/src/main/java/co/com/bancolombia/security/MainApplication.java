@@ -17,10 +17,6 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 public class MainApplication {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
-
-
-
-
     }
     //----------
     //Consola h2

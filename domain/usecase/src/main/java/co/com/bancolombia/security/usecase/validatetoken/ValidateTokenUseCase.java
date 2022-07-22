@@ -27,8 +27,8 @@ public class ValidateTokenUseCase {
     public ApiResponse validateToken(RequestTokenValidateDTO requestDTO){
 
         RequestTokenValidate request = ValidateTokenRequest.standard(requestDTO);
-        //String responseToken = tokenAdapter.validateToken(request.getAuthorization());
-        String responseToken = tokenAdapter.validateTokenPCD(request.getAuthorization());
+        String responseToken = tokenAdapter.validateToken(request.getAuthorization());
+        //String responseToken = tokenAdapter.validateTokenPCD(request.getAuthorization());
         SessionGlobals.appId.set(request.getClientId());
 
         if(!responseToken.equals(String.valueOf(HttpURLConnection.HTTP_OK))){
