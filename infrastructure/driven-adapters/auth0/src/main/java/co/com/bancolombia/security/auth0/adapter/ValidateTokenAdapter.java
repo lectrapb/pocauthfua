@@ -23,7 +23,10 @@ public class ValidateTokenAdapter implements CaTokenRepository {
 
     @Override
     public String validateToken(String token) {
-        JwkProvider provider = new UrlJwkProvider("https://bancolombia-poc.us.auth0.com/oauth");
+        //Auth0
+        //JwkProvider provider = new UrlJwkProvider("https://bancolombia-poc.us.auth0.com/oauth");
+        //Cognito
+        JwkProvider provider = new UrlJwkProvider("https://cognito-idp.us-east-1.amazonaws.com/us-east-1_rVnPBe3ge");
         String rta = "200";
         try{
             DecodedJWT jwt = JWT.decode(token);
@@ -67,6 +70,48 @@ public class ValidateTokenAdapter implements CaTokenRepository {
 
         String[] chunks = token.split("\\.");
         String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+
+        //Read the JSON file
+        JsonElement root = new JsonParser().parse(payload);
+
+        //Get the content of the first map
+        //JsonObject object = root.getAsJsonObject().get("user").getAsJsonObject();
+        Gson gson = new Gson();
+        JsonToken jsonToken = new JsonToken();
+        String dataClear ="\"";
+        //jsonToken.setRequestIp(root.getAsJsonObject().get("request-ip").toString());
+        //jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
+        //String data = root.getAsJsonObject().get("iss").toString();
+        jsonToken.setCustomerName(root.getAsJsonObject().get("customerName").toString().replace(dataClear, ""));
+        jsonToken.setDocumentNumber(root.getAsJsonObject().get("documentNumber").toString().replace(dataClear, ""));
+        jsonToken.setDocumentType(root.getAsJsonObject().get("documentType").toString().replace(dataClear, ""));
+        jsonToken.setLastEntryDate(root.getAsJsonObject().get("lastEntryDate").toString().replace(dataClear, ""));
+        jsonToken.setLastHour(root.getAsJsonObject().get("lastHour").toString().replace(dataClear, ""));
+        jsonToken.setScopeExtra(root.getAsJsonObject().get("scopeExtra").toString().replace(dataClear, ""));
+        //jsonToken.setSessionToken(root.getAsJsonObject().get("sessionToken").toString());
+        jsonToken.setTokenType(root.getAsJsonObject().get("tokenType").toString().replace(dataClear, ""));
+        jsonToken.setScope(root.getAsJsonObject().get("scopeExtra").toString().replace(dataClear, ""));
+
+
+        jsonToken.setIss(root.getAsJsonObject().get("iss").toString().replace(dataClear, ""));
+        //jsonToken.setSub(root.getAsJsonObject().get("sub").toString().replace(dataClear, ""));
+        jsonToken.setAud(root.getAsJsonObject().get("aud").toString().replace(dataClear, ""));
+        jsonToken.setIat(root.getAsJsonObject().get("iat").toString().replace(dataClear, ""));
+        jsonToken.setExp(root.getAsJsonObject().get("exp").toString().replace(dataClear, ""));
+        //jsonToken.setAzp(root.getAsJsonObject().get("azp").toString().replace(dataClear, ""));
+        //jsonToken.setScope(root.getAsJsonObject().get("scope").toString().replace(dataClear, ""));
+        //jsonToken.setGty(root.getAsJsonObject().get("gty").toString().replace(dataClear, ""));
+        return  jsonToken;
+    }
+
+
+    public  JsonToken   decodeToken2 (String token){
+
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        String[] chunks = token.split("\\.");
+        String header = new String(decoder.decode(chunks[0]));
         String payloadInit = new String(decoder.decode(chunks[1]));
 
         String dataClear = "https://bancolombia.com/request-ip";
@@ -82,7 +127,7 @@ public class ValidateTokenAdapter implements CaTokenRepository {
         Gson gson = new Gson();
         JsonToken jsonToken = new JsonToken();
         //jsonToken.setRequestIp(root.getAsJsonObject().get("request-ip").toString());
-        jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
+        //jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
         //String data = root.getAsJsonObject().get("iss").toString();
         dataClear ="\"";
         jsonToken.setIss(root.getAsJsonObject().get("iss").toString().replace(dataClear, ""));

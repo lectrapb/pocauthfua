@@ -6,7 +6,6 @@ import lombok.Data;
 public class JsonToken {
 
     private String requestIp;
-    private User user;
     private String iss;
     private String sub;
     private String aud;
@@ -16,16 +15,14 @@ public class JsonToken {
     private String scope;
     private String gty;
 
-    @Data
-    public class  User{
+    private String customerName;
+    private String documentNumber;
+    private String documentType;
+    private String lastEntryDate;
+    private String lastHour;
+    private String scopeExtra;
+    private String sessionToken;
+    private String tokenType;
 
-        private String customerName;
-        private String documentNumber;
-        private String documentType;
-        private String lastEntryDate;
-        private String lastHour;
-        private String scopeExtra;
-        private String sessionToken;
-        private String tokenType;
-    }
+
 }

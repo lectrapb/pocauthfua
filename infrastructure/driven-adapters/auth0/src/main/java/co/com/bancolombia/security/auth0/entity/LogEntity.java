@@ -16,7 +16,7 @@ public class LogEntity implements Serializable {
 
    @Id
    @Column(name = "log_id")
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.AUTO)
    private Long id;
    @Column(name = "log_message_id", length = 128)
    private String messageId;
