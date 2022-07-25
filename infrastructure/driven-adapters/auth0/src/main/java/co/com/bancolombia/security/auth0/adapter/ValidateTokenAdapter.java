@@ -166,7 +166,7 @@ public class ValidateTokenAdapter implements CaTokenRepository {
         Gson gson = new Gson();
         JsonToken jsonToken = new JsonToken();
         //jsonToken.setRequestIp(root.getAsJsonObject().get("request-ip").toString());
-        jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
+        //jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
         //String data = root.getAsJsonObject().get("iss").toString();
         dataClear ="\"";
         jsonToken.setIss(root.getAsJsonObject().get("iss").toString().replace(dataClear, ""));
