@@ -23,14 +23,17 @@ public class ValidateTokenAdapter implements CaTokenRepository {
 
     @Override
     public String validateToken(String token) {
+
         //Auth0
         //JwkProvider provider = new UrlJwkProvider("https://bancolombia-poc.us.auth0.com/oauth");
         //Cognito
         JwkProvider provider = new UrlJwkProvider("https://cognito-idp.us-east-1.amazonaws.com/us-east-1_rVnPBe3ge");
+
         String rta = "200";
         try{
             DecodedJWT jwt = JWT.decode(token);
-            Jwk jwk = provider.get(jwt.getKeyId());
+            String keyJWK = jwt.getKeyId();
+            Jwk jwk = provider.get(keyJWK);
             PublicKey publicKey = jwk.getPublicKey();
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
             algorithm.verify(jwt);
@@ -128,6 +131,42 @@ public class ValidateTokenAdapter implements CaTokenRepository {
         JsonToken jsonToken = new JsonToken();
         //jsonToken.setRequestIp(root.getAsJsonObject().get("request-ip").toString());
         //jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
+        //String data = root.getAsJsonObject().get("iss").toString();
+        dataClear ="\"";
+        jsonToken.setIss(root.getAsJsonObject().get("iss").toString().replace(dataClear, ""));
+        //jsonToken.setSub(root.getAsJsonObject().get("sub").toString().replace(dataClear, ""));
+        jsonToken.setAud(root.getAsJsonObject().get("aud").toString().replace(dataClear, ""));
+        //jsonToken.setIat(root.getAsJsonObject().get("iat").toString().replace(dataClear, ""));
+        //jsonToken.setExp(root.getAsJsonObject().get("exp").toString().replace(dataClear, ""));
+        //jsonToken.setAzp(root.getAsJsonObject().get("azp").toString().replace(dataClear, ""));
+        jsonToken.setScope(root.getAsJsonObject().get("scope").toString().replace(dataClear, ""));
+        jsonToken.setGty(root.getAsJsonObject().get("gty").toString().replace(dataClear, ""));
+        return  jsonToken;
+    }
+
+
+    public  JsonToken   decodeTokenAuth (String token){
+
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        String[] chunks = token.split("\\.");
+        String header = new String(decoder.decode(chunks[0]));
+        String payloadInit = new String(decoder.decode(chunks[1]));
+
+        String dataClear = "https://bancolombia.com/request-ip";
+        String payload = payloadInit.replace(dataClear, "request-ip");
+        dataClear = "https://bancolombia.com/user";
+        payload = payload.replace(dataClear, "user");
+
+        //Read the JSON file
+        JsonElement root = new JsonParser().parse(payload);
+
+        //Get the content of the first map
+        JsonObject object = root.getAsJsonObject().get("user").getAsJsonObject();
+        Gson gson = new Gson();
+        JsonToken jsonToken = new JsonToken();
+        //jsonToken.setRequestIp(root.getAsJsonObject().get("request-ip").toString());
+        jsonToken.setUser(gson.fromJson(object.toString(),JsonToken.User.class));
         //String data = root.getAsJsonObject().get("iss").toString();
         dataClear ="\"";
         jsonToken.setIss(root.getAsJsonObject().get("iss").toString().replace(dataClear, ""));
